@@ -1,0 +1,1 @@
+﻿单独的authorization server

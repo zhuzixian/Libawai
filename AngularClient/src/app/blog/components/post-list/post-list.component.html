@@ -1,0 +1,13 @@
+<div class="post-list-container">
+    <div *ngIf="!pageMeta">
+        <mat-spinner></mat-spinner>
+    </div>
+    <div *ngIf="pageMeta">
+        <button mat-fab color="warn" class="add-fab" [routerLink]="'/blog/write-post'" *ngIf="odic.userAvailable">
+            <mat-icon aria-label="Add Post">add</mat-icon>
+        </button>
+        <div *ngFor="let item of posts">
+            <app-post-card [post]="item"></app-post-card>
+        </div>
+    </div>
+</div>

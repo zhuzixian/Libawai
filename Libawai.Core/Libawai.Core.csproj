@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Entities\PostImage.cs~RF5947f6f.TMP" />
+    <None Remove="Interfaces\IPostRepository.cs~RF358aa27.TMP" />
+  </ItemGroup>
+
+</Project>
