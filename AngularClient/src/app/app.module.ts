@@ -9,7 +9,6 @@ import { RequireAuthenticatedUserRouteGuard } from './shared/oidc/require-authen
 import { SigninOidcComponent } from './shared/oidc/signin-oidc/signin-oidc.component';
 import { RedirectSilentRenewComponent } from './shared/oidc/redirect-silent-renew/redirect-silent-renew.component';
 import { OpenIdConnectService } from './shared/oidc/open-id-connect.service';
-import { AuthorizationHeaderInterceptor } from './shared/oidc/authorization-header.interceptor';
 import { GlobalErrorHandler } from './shared/global-error-handler';
 import { ErrorLoggerService } from './shared/error-logger.service';
 

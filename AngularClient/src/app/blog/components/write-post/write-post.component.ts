@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { PostService } from '../../services/post.service';
 import { TinymceService } from '../../services/tinymce.service';
 import { MatSnackBar } from '@angular/material';
+import { ValidationErrorHandler } from 'src/app/shared/validation-error-handler';
 
 @Component({
   selector: 'app-write-post',
@@ -41,8 +42,8 @@ export class WritePostComponent implements OnInit {
         },
         validationResult => {
           this.snackbar.open('There are validation errors!', 'Close', { duration: 3000 });
+          ValidationErrorHandler.handleFormValidationErrors(this.postForm, validationResult);
         });
-      // ValidationErrorHandler.handleFormValidationErrors(this.postForm, validationResult);
     }
   }
 }
