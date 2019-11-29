@@ -2,7 +2,8 @@
     <div *ngIf="!pageMeta">
         <mat-spinner></mat-spinner>
     </div>
-    <div *ngIf="pageMeta">
+    <div *ngIf="pageMeta" class="search-results" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+        (scrolled)="onScroll()" [infiniteScrollContainer]="'.mat-drawer-content'" [fromRoot]="true">
         <button mat-fab color="warn" class="add-fab" [routerLink]="'/blog/write-post'" *ngIf="odic.userAvailable">
             <mat-icon aria-label="Add Post">add</mat-icon>
         </button>

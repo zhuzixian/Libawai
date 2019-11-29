@@ -28,6 +28,8 @@ import { EnsureAcceptHeaderInterceptor } from '../shared/ensure-accept-header.in
 import { PostDetailComponent } from './components/post-detail/post-detail.component';
 import { SafeHtmlPipe } from '../shared/safe-html.pipe';
 import { EditPostComponent } from './components/edit-post/edit-post.component';
+import { InfiniteScrollModule} from 'ngx-infinite-scroll';
+import { PostTableComponent } from './components/post-table/post-table.component';
 
 
 @NgModule({
@@ -36,11 +38,13 @@ import { EditPostComponent } from './components/edit-post/edit-post.component';
     NavbarComponent,
     DashboardComponent,
     PostListComponent,
+    PostTableComponent,
     PostCardComponent,
     WritePostComponent,
     PostDetailComponent,
     SafeHtmlPipe,
     EditPostComponent,
+    PostTableComponent
   ],
   imports: [
     FormsModule,
@@ -48,6 +52,7 @@ import { EditPostComponent } from './components/edit-post/edit-post.component';
     EditorModule,
     CommonModule,
     BlogRoutingModule,
+    InfiniteScrollModule,
     MaterialModule,
     LayoutModule,
     MatToolbarModule,

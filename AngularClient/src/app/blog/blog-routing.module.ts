@@ -7,14 +7,14 @@ import { RequireAuthenticatedUserRouteGuard } from '../shared/oidc/require-authe
 import { WritePostComponent } from './components/write-post/write-post.component';
 import { PostDetailComponent } from './components/post-detail/post-detail.component';
 import { EditPostComponent } from './components/edit-post/edit-post.component';
+import { PostTableComponent } from './components/post-table/post-table.component';
 
 
 const routes: Routes = [
   { path: '', component: BlogAppComponent,
     children: [
-      {
-        path: 'post-list', component: PostListComponent
-      },
+      { path: 'post-list', component: PostListComponent },
+      { path: 'post-table', component: PostTableComponent },
       {
         path: 'write-post', component: WritePostComponent,
         canActivate: [RequireAuthenticatedUserRouteGuard]

@@ -15,13 +15,14 @@ export class PostListComponent implements OnInit {
 
   posts: Post[];
   pageMeta: PageMeta;
-  postParameter = new PostParameters({ orderBy: 'id desc', pageSize: 10, pageIndex: 0});
+  postParameter = new PostParameters({ orderBy: 'id desc', pageSize: 6, pageIndex: 0});
 
   constructor(
     private postService: PostService,
     private odic: OpenIdConnectService) { }
 
   ngOnInit() {
+    this.posts = [];
     this.getPosts();
   }
 
@@ -29,9 +30,17 @@ export class PostListComponent implements OnInit {
     this.postService.getPagedPosts(this.postParameter).subscribe(resp => {
       this.pageMeta = JSON.parse(resp.headers.get('X-Pagination')) as PageMeta;
       const result = {...resp.body} as ResultWithLinks<Post>;
-      this.posts = result.value;
+      this.posts = this.posts.concat(result.value);
       console.log(this.posts);
     });
+  }
+
+  onScroll() {
+    console.log('scrolled down!!');
+    this.postParameter.pageIndex++;
+    if (this.postParameter.pageIndex < this.pageMeta.pageCount) {
+      this.getPosts();
+    }
   }
 
 }

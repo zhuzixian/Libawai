@@ -5,6 +5,7 @@ import { PostParameters } from '../models/post-parameters';
 import { Post } from '../models/post';
 import { PostAdd } from '../models/post-add';
 import { Observable } from 'rxjs';
+import { Operation } from 'fast-json-patch';
 
 @Injectable({
   providedIn: 'root'
