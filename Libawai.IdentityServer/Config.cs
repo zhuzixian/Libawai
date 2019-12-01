@@ -8,8 +8,9 @@ namespace Libawai.IdentityServer
 {
     public static class Config
     {
-        public static IEnumerable<IdentityResource> IdentityResources
-            => new List<IdentityResource>
+        public static IEnumerable<IdentityResource> GetIdentityResources()
+        {
+            return new List<IdentityResource>
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
@@ -17,15 +18,19 @@ namespace Libawai.IdentityServer
                 new IdentityResources.Address(),
                 new IdentityResources.Phone(),
             };
+        }
 
-        public static IEnumerable<ApiResource> Apis
-            => new List<ApiResource>
+        public static IEnumerable<ApiResource> GetApiResources()
+        {
+            return new List<ApiResource>
             {
                 new ApiResource("api1", "Libawai API")
             };
+        }
 
-        public static IEnumerable<Client> Clients
-            => new List<Client>
+        public static IEnumerable<Client> GetClients()
+        {
+            return new List<Client>
             {
                 // Angular client using implicit flow
                 new Client
@@ -65,6 +70,7 @@ namespace Libawai.IdentityServer
                     }
                 }
             };
+        }
 
         public static List<TestUser> Users
             => new List<TestUser>

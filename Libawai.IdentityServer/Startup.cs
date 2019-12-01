@@ -1,9 +1,14 @@
+using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
+using Libawai.IdentityServer.Data;
+using Libawai.IdentityServer.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,48 +18,74 @@ namespace Libawai.IdentityServer
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            const string connectionString =
-                "Data Source=(localdb)\\MSSQLLocalDB;" +
-                "Initial Catalog=libawai_identity;" +
-                "Integrated Security=True;Connect Timeout=30;" +
-                "Encrypt=False;" +
-                "TrustServerCertificate=False;" +
-                "ApplicationIntent=ReadWrite;" +
-                "MultiSubnetFailover=False";
+            var connectionStringFile = Configuration.GetConnectionString("DefaultConnection_file");
+            var connectionString = File.Exists(connectionStringFile)
+                ? File.ReadAllText(connectionStringFile).Trim()
+                : Configuration.GetConnectionString("DefaultConnection");
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                throw new Exception(" ˝æ›ø‚≈‰÷√“Ï≥£");
+            }
+
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddControllersWithViews();
 
-            services.AddIdentityServer()
-                .AddDeveloperSigningCredential()
-                .AddInMemoryIdentityResources(Config.IdentityResources)
-                .AddInMemoryApiResources(Config.Apis)
-                .AddInMemoryClients(Config.Clients)
-                .AddTestUsers(Config.Users)
-/*                .AddConfigurationStore(options =>
-                {
-                    options.ConfigureDbContext = b =>
-                        b.UseSqlServer(connectionString,
-                            sql => sql.MigrationsAssembly(migrationsAssembly));
-                })
-                .AddOperationalStore(options =>
-                {
-                    options.ConfigureDbContext = b =>
-                        b.UseSqlServer(connectionString,
+            services.Configure<IISOptions>(iis =>
+            {
+                iis.AuthenticationDisplayName = "Windows";
+                iis.AutomaticAuthentication = false;
+            });
+
+            var builder = services.AddIdentityServer(options =>
+            {
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+            })
+                .AddAspNetIdentity<ApplicationUser>()
+                    .AddConfigurationStore(options =>
+                    {
+                         options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
+                        sql => sql.MigrationsAssembly(migrationsAssembly));
+
+                    })
+                    .AddOperationalStore(options =>
+                    {
+                        options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
                             sql => sql.MigrationsAssembly(migrationsAssembly));
 
-                    options.EnableTokenCleanup = true;
-                })*/;
+                        options.EnableTokenCleanup = true;
+                    });
+
+            if (Environment.IsDevelopment())
+            {
+                builder.AddDeveloperSigningCredential();
+            }
+            else
+            {
+                throw new Exception("need to configure key material");
+            }
+
+            services.AddAuthentication();
 
             services.AddCors(options =>
             {
@@ -70,8 +101,6 @@ namespace Libawai.IdentityServer
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-//            InitializeDatabase(app);
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -83,12 +112,11 @@ namespace Libawai.IdentityServer
 
             app.UseCors("AngularDev");
 
+            app.UseStaticFiles();
+            app.UseRouting();
             app.UseIdentityServer();
 
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
@@ -103,7 +131,7 @@ namespace Libawai.IdentityServer
             context.Database.Migrate();
             if (!context.Clients.Any())
             {
-                foreach (var client in Config.Clients)
+                foreach (var client in Config.GetClients())
                 {
                     context.Clients.Add(client.ToEntity());
                 }
@@ -113,7 +141,7 @@ namespace Libawai.IdentityServer
 
             if (!context.IdentityResources.Any())
             {
-                foreach (var resource in Config.IdentityResources)
+                foreach (var resource in Config.GetIdentityResources())
                 {
                     context.IdentityResources.Add(resource.ToEntity());
                 }
@@ -123,7 +151,7 @@ namespace Libawai.IdentityServer
 
             if (!context.ApiResources.Any())
             {
-                foreach (var api in Config.Apis)
+                foreach (var api in Config.GetApiResources())
                 {
                     context.ApiResources.Add(api.ToEntity());
                 }

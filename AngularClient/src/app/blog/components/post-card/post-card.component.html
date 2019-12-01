@@ -1,7 +1,8 @@
 <mat-card class="post-card">
     <mat-card-header class="post-card-header">
         <div mat-card-avatar>
-            <img class="avatar" [src]="'/assets/default-user.png'">
+            <img class="avatar" [src]="'/avatars/' + post.author + '.jpg'" [alt]="'/avatars/' + post.author + '.jpg'" 
+            onerror="if (this.src != '/assets/default-user.png') this.src = '/asserts/default-user.png';">
         </div>
         <mat-card-title [routerLink]="['/blog/post-detail', post.id]" >
             <b>{{post.title}}</b>
