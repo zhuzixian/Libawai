@@ -36,18 +36,22 @@
                 </a>
             </div>
 
-            @if (!string.IsNullOrWhiteSpace(name))
-            {
-                <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav">
+                @if (!string.IsNullOrWhiteSpace(name))
+                {
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">@name <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a asp-action="Index"asp-controller="Picture">Info</a></li>
+                            <li><a asp-action="Index" asp-controller="Picture">Info</a></li>
                             <li><a asp-action="Logout" asp-controller="Account">Logout</a></li>
                         </ul>
                     </li>
-                </ul>
-            }
+                }
+                else
+                {
+                    <li><a asp-action="Login" asp-controller="Account">Login</a></li>
+                }
+            </ul>
         </div>
     </div>
 
@@ -57,6 +61,7 @@
 
     <script src="~/lib/jquery/jquery.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.js"></script>
+    <script src="~/js/showTip.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

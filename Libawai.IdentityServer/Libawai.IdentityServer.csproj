@@ -18,6 +18,7 @@
   <ItemGroup>
     <None Remove="Config.cs~RFd320f3.TMP" />
     <None Remove="Startup.cs~RFba526c.TMP" />
+    <None Remove="Views\Account\Login.cshtml~RF1a42a679.TMP" />
   </ItemGroup>
 
   <ItemGroup>
