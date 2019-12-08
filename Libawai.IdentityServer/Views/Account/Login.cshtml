@@ -14,7 +14,7 @@
 
             @if (Model.EnableLocalLogin)
             {
-                <form asp-route="Login" class="login-container">
+                <form asp-route="Login" class="form login-container">
                     <input type="hidden" asp-for="ReturnUrl" />
                     <input class="login-name" placeholder="Username" asp-for="Username">
                     @*<input class="login-pass" type="password" placeholder="Password" asp-for="Password" autocomplete="off">*@
@@ -37,7 +37,7 @@
 
                     @if (Model.AllowRememberLogin)
                     {
-                        <div class="form-group">
+                        <div class="form-group login-remember">
                             <label asp-for="RememberLogin">
                                 <input asp-for="RememberLogin">
                                 <strong>Remember My Login</strong>
@@ -57,13 +57,13 @@
                     <button name="button" value="cancel">Cancel</button>
 
 
-                    <p class="to-register"><a href="register" class="register">没有账号? 去注册</a><a href="forgot-password" >忘记密码？重置</a></p>
+                    <p class="to-register"><a href="register" class="register">没有账号? 去注册</a><a href="forgot-password" class="reset">忘记密码？重置</a></p>
                 </form>
 
             }
             @if (Model.VisibleExternalProviders.Any())
             {
-                <div class="col-md-6 col-sm-6">
+                <div class="col-md-6 col-sm-6 external-providers">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title">External Login</h3>
