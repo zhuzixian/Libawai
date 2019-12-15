@@ -13,7 +13,6 @@ namespace Libawai.API.Extensions
                     opt => opt.MapFrom(src => src.LastModified));
 
             CreateMap<PostResource, Post>();
-            CreateMap<PostResource, Post>();
             CreateMap<PostUpdateResource, Post>();
             CreateMap<PostAddResource, Post>();
 
